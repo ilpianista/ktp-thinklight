@@ -1,0 +1,5 @@
+File=thinklight.kcfg
+ClassName=ThinkLightConfig
+Singleton=true
+Mutators=true
+

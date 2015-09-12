@@ -1,0 +1,18 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+ServiceTypes=KTpTextUi/MessageFilter
+
+X-KDE-Library=ktptextui_message_filter_thinklight
+X-KDE-PluginInfo-Author=Andrea Scarpino
+X-KDE-PluginInfo-Email=scarpino@kde.org
+X-KDE-PluginInfo-Name=thinklight
+X-KDE-PluginInfo-Version=0.1
+X-KDE-PluginInfo-Website=http://community.kde.org/KTp
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-EnabledByDefault=false
+X-KDE-PluginInfo-Weight=10
+X-KTp-PluginInfo-Version=5
+
+Name=ThinkLight
+Comment=Power on Thinkpad led when there is a new message

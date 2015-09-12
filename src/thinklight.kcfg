@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+                          http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
+    <kcfgfile name="ktp-text-uirc"/>
+    <group name="Filter-ThinkLight">
+        <entry name="LightPath" type="String">
+            <default>/proc/acpi/ibm/light</default>
+        </entry>
+        <entry name="Times" type="Int">
+            <default>3</default>
+        </entry>
+        <entry name="OnMsec" type="Int">
+            <default>500</default>
+        </entry>
+        <entry name="OffMsec" type="Int">
+            <default>300</default>
+        </entry>
+        <entry name="AwayOnly" type="Bool">
+            <default>true</default>
+        </entry>
+    </group>
+</kcfg>
