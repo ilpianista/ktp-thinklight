@@ -8,6 +8,9 @@
         <entry name="LightPath" type="String">
             <default>/proc/acpi/ibm/light</default>
         </entry>
+        <entry name="ThinkAlertPath" type="String">
+            <default>/usr/bin/thinkalert</default>
+        </entry>
         <entry name="Times" type="Int">
             <default>3</default>
         </entry>

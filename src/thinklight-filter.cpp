@@ -19,9 +19,6 @@
 #include "thinklight-filter.h"
 
 #include <QDebug>
-#include <QFile>
-#include <QFileInfo>
-#include <QTimer>
 
 #include <KPluginFactory>
 
@@ -34,12 +31,18 @@
 ThinkLightFilter::ThinkLightFilter(QObject* parent, const QVariantList &)
     : AbstractMessageFilter(parent)
     , m_blinking(false)
-    , m_times(0)
+    , m_process(new QProcess(this))
 {
+    connect(m_process, (void (QProcess::*)(int))&QProcess::finished, this, &ThinkLightFilter::finished);
 }
 
 ThinkLightFilter::~ThinkLightFilter()
 {
+    if (m_process->state() == QProcess::Running) {
+        m_process->kill();
+    }
+
+    delete m_process;
 }
 
 void ThinkLightFilter::filterMessage(KTp::Message &message, const KTp::MessageContext &context)
@@ -69,45 +72,20 @@ void ThinkLightFilter::filterMessage(KTp::Message &message, const KTp::MessageCo
 
     if (!m_blinking) {
         m_blinking = true;
-        m_times = ThinkLightConfig::self()->times();
-        powerOn();
+        QStringList parameters;
+        parameters << QString::number(ThinkLightConfig::self()->times());
+        parameters << QString::number(ThinkLightConfig::self()->onMsec());
+        parameters << QString::number(ThinkLightConfig::self()->offMsec());
+        m_process->start(ThinkLightConfig::self()->thinkAlertPath(), parameters);
     }
 }
 
-void ThinkLightFilter::powerOff()
+void ThinkLightFilter::finished(int exitCode)
 {
-    setState(false);
-    QTimer::singleShot(ThinkLightConfig::self()->offMsec(), this, &ThinkLightFilter::powerOn);
-}
+    m_blinking = false;
 
-void ThinkLightFilter::powerOn()
-{
-    if (m_times > 0) {
-        setState(true);
-        QTimer::singleShot(ThinkLightConfig::self()->onMsec(), this, &ThinkLightFilter::powerOff);
-        m_times--;
-    } else {
-        m_blinking = false;
-    }
-}
-
-void ThinkLightFilter::setState(const bool powered)
-{
-    QFile lightFile(ThinkLightConfig::self()->lightPath());
-    lightFile.open(QIODevice::ReadWrite);
-
-    if (lightFile.isOpen()) {
-        if (powered) {
-            qDebug() << "Turning light on";
-            lightFile.write(QByteArray("on"));
-        } else {
-            qDebug() << "Turning light off";
-            lightFile.write(QByteArray("off"));
-        }
-
-        lightFile.close();
-    } else {
-        qDebug() << "Cannot open" << QFileInfo(lightFile).absoluteFilePath();
+    if (!exitCode) {
+        qDebug() << "ThinkAlert failed with exit code" << exitCode;
     }
 }
 

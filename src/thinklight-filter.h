@@ -19,6 +19,8 @@
 #ifndef THINKLIGHT_FILTER_H
 #define THINKLIGHT_FILTER_H
 
+#include <QProcess>
+
 #include <KTp/abstract-message-filter.h>
 
 class ThinkLightFilter : public KTp::AbstractMessageFilter
@@ -31,12 +33,10 @@ public:
     virtual void filterMessage(KTp::Message &message, const KTp::MessageContext &context);
 
 private:
-    void setState(const bool powered);
-    void powerOff();
-    void powerOn();
+    void finished(int exitCode);
 
     bool m_blinking;
-    quint8 m_times;
+    QProcess* m_process;
 
 };
 
