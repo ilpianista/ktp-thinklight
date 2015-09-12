@@ -31,6 +31,8 @@
 
 #include "thinklightconfig.h"
 
+const static QString LIGHT_PATH = QStringLiteral("/proc/acpi/ibm/light");
+
 ThinkLightFilter::ThinkLightFilter(QObject* parent, const QVariantList &)
     : AbstractMessageFilter(parent)
     , m_blinking(false)
@@ -93,7 +95,7 @@ void ThinkLightFilter::powerOn()
 
 void ThinkLightFilter::setState(const bool powered)
 {
-    QFile lightFile(ThinkLightConfig::self()->lightPath());
+    QFile lightFile(LIGHT_PATH);
     lightFile.open(QIODevice::ReadWrite);
 
     if (lightFile.isOpen()) {
